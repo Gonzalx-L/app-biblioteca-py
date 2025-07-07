@@ -1,0 +1,123 @@
+<!-- @format -->
+
+{% extends "base.html" %} {% block title %}Préstamos{% endblock %} {% block
+head_extra %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='../static/styles/prestamos.css') }}" />
+{% endblock %} {% block content %}
+<h2 class="prestamos-header">
+  <i class="bi bi-journal-check me-2"></i>
+  Gestión de Préstamos
+</h2>
+<button
+  class="btn btn-success mb-3 shadow-sm"
+  data-bs-toggle="modal"
+  data-bs-target="#modalPrestamo">
+  <i class="bi bi-plus-circle me-1"></i>
+  Registrar Préstamo
+</button>
+<div class="table-responsive">
+  <table class="table table-custom table-striped table-hover align-middle">
+    <thead>
+      <tr>
+        <th>Alumno</th>
+        <th>Libro</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for prestamo in prestamos %}
+      <tr>
+        <td>
+          {% for alumno in alumnos %} {% if alumno.dni == prestamo.alumno_dni %}
+          {{ alumno.nombre }} {% endif %} {% endfor %}
+        </td>
+        <td>
+          {% for libro in libros %} {% if libro.id == prestamo.libro_id %} {{
+          libro.titulo }} {% endif %} {% endfor %}
+        </td>
+        <td>{{ prestamo.fecha }}</td>
+        <td>
+          {% if prestamo.devuelto %}
+          <span class="badge bg-success px-3 py-2">Devuelto</span>
+          {% else %}
+          <span class="badge bg-warning text-dark px-3 py-2">Activo</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if not prestamo.devuelto %}
+          <form
+            method="POST"
+            action="{{ url_for('marcar_devuelto', prestamo_id=prestamo.id) }}"
+            style="display: inline">
+            <button
+              class="btn btn-sm btn-primary shadow-sm"
+              title="Marcar como devuelto">
+              <i class="bi bi-check2-square"></i> Devuelto
+            </button>
+          </form>
+          {% else %}
+          <span class="text-muted">-</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal para agregar préstamo -->
+<div
+  class="modal fade"
+  id="modalPrestamo"
+  tabindex="-1"
+  aria-labelledby="modalPrestamoLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="{{ url_for('prestamos') }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalPrestamoLabel">
+            Registrar Préstamo
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <select class="form-select mb-2" name="alumno_dni" required>
+            <option value="">Alumno</option>
+            {% for alumno in alumnos %}
+            <option value="{{ alumno.dni }}">
+              {{ alumno.nombre }} ({{ alumno.dni }})
+            </option>
+            {% endfor %}
+          </select>
+          <select class="form-select mb-2" name="libro_id" required>
+            <option value="">Libro</option>
+            {% for libro in libros %}
+            <option value="{{ libro.id }}">{{ libro.titulo }}</option>
+            {% endfor %}
+          </select>
+          <input type="date" class="form-control mb-2" name="fecha" required />
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success shadow-sm">
+            <i class="bi bi-save2 me-1"></i> Registrar
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

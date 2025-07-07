@@ -1,0 +1,95 @@
+<!-- @format -->
+
+{% extends "base.html" %} {% block title %}Dashboard{% endblock %} {% block
+head_extra %}
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.0/dist/css/bootstrap-datepicker.min.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='./styles/dashboard.css') }}" />
+{% endblock %} {% block content %}
+<div class="mx-auto" style="max-width: 950px">
+  <div class="d-flex justify-content-center">
+    <h2
+      class="fw-bold text-dark-blue mb-4 text-center"
+      style="letter-spacing: 0.5px">
+      Bienvenido al Sistema de Biblioteca
+    </h2>
+  </div>
+  <!-- KPIs -->
+  <div class="row g-4 mb-4 justify-content-center">
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card kpi-card-dark text-center shadow border-0">
+        <h6 class="mb-2 text-gradient">Libros</h6>
+        <p class="display-5 fw-bold m-0">
+          {{ libros|length if libros is defined else 0 }}
+        </p>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card kpi-card-dark text-center shadow border-0">
+        <h6 class="mb-2 text-gradient">Alumnos</h6>
+        <p class="display-5 fw-bold m-0">
+          {{ alumnos|length if alumnos is defined else 0 }}
+        </p>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card kpi-card-dark text-center shadow border-0">
+        <h6 class="mb-2 text-gradient">Préstamos</h6>
+        <p class="display-5 fw-bold m-0">
+          {{ prestamos|length if prestamos is defined else 0 }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- Calendario y Sugerencia -->
+  <div class="row g-4 mt-4">
+    <div class="col-12 col-md-7 col-lg-6">
+      <div class="card shadow border-0 rounded-4 card-dashboard-section">
+        <h5 class="mb-3 text-dark-blue">
+          <i class="bi bi-calendar2-week me-2"></i> Calendario
+        </h5>
+        <br />
+        <div class="calendar-flex-center">
+          <div id="datepicker"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-5 col-lg-6">
+      <div class="card shadow border-0 rounded-4 card-dashboard-section">
+        <h5 class="mb-3 text-dark-blue">
+          <i class="bi bi-info-circle-fill me-2"></i> Sugerencia del día
+        </h5>
+        <div class="fs-6 text-secondary-emphasis">
+          <ul class="mb-0 ps-3">
+            <li>Recuerda devolver tus libros a tiempo.</li>
+            <li>Mantén tu información de usuario actualizada.</li>
+            <li>
+              Consulta las estadísticas para conocer los libros más leídos.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.0/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/locales/bootstrap-datepicker.es.min.js"></script>
+<script>
+  $(function () {
+    $("#datepicker").datepicker({
+      todayHighlight: true,
+      autoclose: true,
+      language: "es",
+    });
+  });
+</script>
+{% endblock %}

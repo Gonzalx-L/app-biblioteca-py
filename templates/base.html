@@ -1,0 +1,165 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Biblioteca{% endblock %}</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <style>
+      body {
+        background: #f5f8fd !important;
+      }
+      .navbar-custom {
+        min-height: 60px;
+        background: linear-gradient(90deg, #2052c1 0%, #1ec6e6 100%);
+        box-shadow: 0 2px 18px 0 #093d6522;
+        border-bottom: none;
+      }
+      .navbar-custom .navbar-brand,
+      .navbar-custom .navbar-brand span,
+      .navbar-custom .nav-link,
+      .navbar-custom .user-info,
+      .navbar-custom a,
+      .navbar-custom .bi {
+        color: #fff !important;
+      }
+      .sidebar {
+        min-width: 215px;
+        background: linear-gradient(180deg, #2052c1 0%, #1ec6e6 100%);
+        box-shadow: 2px 0 16px 0 #0d388440;
+        z-index: 100;
+        padding-top: 1.3rem;
+        height: 100vh;
+      }
+      .sidebar .nav-link {
+        color: #e6f3fc;
+        font-weight: 500;
+        border-radius: 1.4rem 0 0 1.4rem;
+        margin: 0.18rem 0;
+        padding: 0.7rem 1.2rem 0.7rem 2.1rem;
+        transition: background 0.14s, color 0.14s;
+        display: flex;
+        align-items: center;
+        font-size: 1.08rem;
+        background: transparent;
+      }
+      .sidebar .nav-link.active,
+      .sidebar .nav-link:hover {
+        background: rgba(255, 255, 255, 0.22);
+        color: #fff !important;
+        font-weight: 700;
+      }
+      .sidebar .bi {
+        margin-right: 10px;
+        font-size: 1.13em;
+      }
+      @media (max-width: 991px) {
+        .sidebar {
+          min-width: 100vw;
+          height: auto;
+          padding-top: 0.5rem;
+          border-radius: 0 0 1.4rem 1.4rem;
+        }
+      }
+      .kpi-card {
+        border-radius: 1rem;
+      }
+      .nav-link.active {
+        font-weight: 600;
+      }
+      .modal-header {
+        background: #f8f9fa;
+      }
+    </style>
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body class="bg-light">
+    {% if session.get('usuario') %}
+    <!-- NAVBAR -->
+    <nav
+      class="navbar navbar-custom navbar-expand-lg px-4 d-flex justify-content-between">
+      <div class="d-flex align-items-center">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/3917/3917754.png"
+          alt="Logo"
+          style="height: 32px; margin-right: 13px" />
+        <span class="navbar-brand mb-0 h1 fw-semibold fs-5"
+          >Sistema Biblioteca</span
+        >
+      </div>
+      <div class="user-info d-flex align-items-center gap-3">
+        <span class="me-1"
+          >Bienvenido, <b>{{ session['usuario']|capitalize }}</b></span
+        >
+        <a
+          href="{{ url_for('logout') }}"
+          class="text-white text-decoration-underline ms-1"
+          >Cerrar sesión</a
+        >
+      </div>
+    </nav>
+    <!-- LAYOUT: SIDEBAR + MAIN -->
+    <div class="d-flex">
+      <!-- SIDEBAR -->
+      <div class="sidebar p-0">
+        <ul class="nav flex-column w-100 mt-2">
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.endpoint=='dashboard' %}active{% endif %}"
+              href="{{ url_for('dashboard') }}">
+              <i class="bi bi-house-door"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.endpoint=='prestamos' %}active{% endif %}"
+              href="{{ url_for('prestamos') }}">
+              <i class="bi bi-bookmark-check"></i> Préstamos
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.endpoint=='libros' %}active{% endif %}"
+              href="{{ url_for('libros') }}">
+              <i class="bi bi-journal-bookmark"></i> Libros
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.endpoint=='alumnos' %}active{% endif %}"
+              href="{{ url_for('alumnos') }}">
+              <i class="bi bi-people"></i> Alumnos
+            </a>
+          </li>
+          <!-- <li class="nav-item">
+            <a
+              class="nav-link {% if request.endpoint=='estadisticas' %}active{% endif %}"
+              href="{{ url_for('estadisticas') }}">
+              <i class="bi bi-bar-chart"></i> Estadísticas
+            </a>
+          </li> -->
+        </ul>
+      </div>
+      <!-- MAIN CONTENT -->
+      <div class="container-fluid p-4" style="min-height: 90vh">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+    {% else %}
+    <div
+      class="container d-flex align-items-center justify-content-center vh-100">
+      <div class="w-100" style="max-width: 400px">
+        {% block login_content %}{% endblock %}
+      </div>
+    </div>
+    {% endif %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

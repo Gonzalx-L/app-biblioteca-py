@@ -1,0 +1,164 @@
+<!-- @format -->
+
+{% extends "base.html" %} {% block title %}Alumnos{% endblock %} {% block
+head_extra %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='../static/styles/alumnos.css') }}" />
+{% endblock %} {% block content %}
+<h2 class="alumnos-header">
+  <i class="bi bi-people-fill me-2"></i>
+  Gestión de Alumnos
+</h2>
+
+<!-- Formulario de búsqueda -->
+<form class="row g-2 mb-4" method="get" action="{{ url_for('alumnos') }}">
+  <div class="col-md-4">
+    <input
+      type="text"
+      class="form-control"
+      name="q_dni"
+      placeholder="Buscar por DNI"
+      value="{{ q_dni|default('') }}" />
+  </div>
+  <div class="col-md-4">
+    <input
+      type="text"
+      class="form-control"
+      name="q_nombre"
+      placeholder="Buscar por nombre"
+      value="{{ q_nombre|default('') }}" />
+  </div>
+  <div class="col-md-4">
+    <input
+      type="text"
+      class="form-control"
+      name="q_correo"
+      placeholder="Buscar por correo"
+      value="{{ q_correo|default('') }}" />
+  </div>
+  <div class="col-12 d-flex justify-content-end mt-2">
+    <button class="btn btn-primary me-2" type="submit">
+      <i class="bi bi-search"></i> Buscar
+    </button>
+    <a href="{{ url_for('alumnos') }}" class="btn btn-outline-secondary">
+      Limpiar
+    </a>
+  </div>
+</form>
+
+<!-- Botón para abrir el modal -->
+<button
+  class="btn btn-success mb-3 shadow-sm"
+  data-bs-toggle="modal"
+  data-bs-target="#modalAlumno">
+  <i class="bi bi-person-plus me-1"></i>
+  Registrar Alumno
+</button>
+
+<div class="table-responsive">
+  <table class="table table-striped table-hover align-middle">
+    <thead>
+      <tr>
+        <th>DNI</th>
+        <th>Nombre</th>
+        <th>Correo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for alumno in alumnos %}
+      <tr>
+        <td>{{ alumno.dni }}</td>
+        <td>{{ alumno.nombre }}</td>
+        <td>{{ alumno.correo }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- PAGINACIÓN -->
+{% if total_pages > 1 %}
+<nav aria-label="Paginación de alumnos">
+  <ul class="pagination justify-content-center mt-4">
+    <li class="page-item {% if page == 1 %}disabled{% endif %}">
+      <a
+        class="page-link"
+        href="{{ url_for('alumnos', page=page-1, q_dni=q_dni, q_nombre=q_nombre, q_correo=q_correo) }}"
+        >Anterior</a
+      >
+    </li>
+    {% for p in range(1, total_pages+1) %}
+    <li class="page-item {% if page == p %}active{% endif %}">
+      <a
+        class="page-link"
+        href="{{ url_for('alumnos', page=p, q_dni=q_dni, q_nombre=q_nombre, q_correo=q_correo) }}"
+        >{{ p }}</a
+      >
+    </li>
+    {% endfor %}
+    <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+      <a
+        class="page-link"
+        href="{{ url_for('alumnos', page=page+1, q_dni=q_dni, q_nombre=q_nombre, q_correo=q_correo) }}"
+        >Siguiente</a
+      >
+    </li>
+  </ul>
+</nav>
+{% endif %}
+
+<!-- Modal para agregar alumno -->
+<div
+  class="modal fade"
+  id="modalAlumno"
+  tabindex="-1"
+  aria-labelledby="modalAlumnoLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- ACTION CORREGIDO -->
+      <form method="POST" action="{{ url_for('alumnos') }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAlumnoLabel">Registrar Alumno</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="text"
+            class="form-control mb-2"
+            name="dni"
+            placeholder="DNI"
+            required />
+          <input
+            type="text"
+            class="form-control mb-2"
+            name="nombre"
+            placeholder="Nombre"
+            required />
+          <input
+            type="email"
+            class="form-control mb-2"
+            name="correo"
+            placeholder="Correo"
+            required />
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success">
+            <i class="bi bi-person-plus"></i> Registrar
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

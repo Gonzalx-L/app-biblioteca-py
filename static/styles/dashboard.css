@@ -1,0 +1,89 @@
+/** @format */
+
+.kpi-card-dark {
+  background: linear-gradient(120deg, #223063 0%, #264a82 80%, #1ec6e6 120%);
+  color: #fff;
+  border-radius: 1.4rem;
+  transition: box-shadow 0.18s, transform 0.18s;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.kpi-card-dark:hover {
+  box-shadow: 0 8px 48px 0 #18c0e858;
+  transform: translateY(-2px) scale(1.035);
+}
+.text-gradient {
+  background: linear-gradient(90deg, #1ec6e6 0%, #2b65f8 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* --- Bloques calendario y sugerencia --- */
+.card.card-dashboard-section {
+  min-height: 0;
+  max-height: 285px;
+  height: 285px;
+  padding: 1rem 1.3rem 1.2rem 1.3rem !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.card-dashboard-section #datepicker {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+#datepicker .datepicker {
+  margin: 0 auto;
+}
+#datepicker {
+  max-width: 250px;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.datepicker table tr td,
+.datepicker table tr th {
+  border-radius: 0.5rem !important;
+  padding: 0.4rem !important;
+}
+.calendar-flex-center {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  height: 100%;
+  min-height: 120px; /* Ajusta si quieres más/menos alto */
+}
+
+#datepicker {
+  margin: 0 !important; /* Elimina márgenes innecesarios */
+  padding: 0;
+}
+
+#datepicker .datepicker {
+  margin: 0 auto !important; /* Centra el widget internamente */
+}
+
+.datepicker .active,
+.datepicker .active:hover {
+  background: linear-gradient(90deg, #2b65f8 0%, #1ec6e6 100%) !important;
+  color: #fff !important;
+  border-radius: 0.4rem;
+}
+.card-dashboard-section .fs-6 {
+  font-size: 0.98rem !important;
+}
+
+/* Responsive: altura libre en pantallas chicas */
+@media (max-width: 991px) {
+  .card.card-dashboard-section {
+    max-height: unset;
+    height: auto;
+    min-height: unset;
+  }
+}
