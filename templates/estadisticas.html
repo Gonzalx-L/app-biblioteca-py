@@ -1,0 +1,96 @@
+<!-- @format -->
+
+{% extends "base.html" %} {% block title %}Estadísticas{% endblock %} {% block
+head_extra %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='../static/styles/dashboard.css') }}" />
+{% endblock %} {% block content %}
+
+<div class="container py-4">
+  <h2 class="mb-4 text-gradient">
+    <i class="bi bi-bar-chart-fill me-2"></i>Estadísticas
+  </h2>
+
+  <div class="row g-4">
+    <!-- Top 5 Libros más prestados -->
+    <div class="col-lg-6">
+      <div class="card kpi-card-dark shadow-sm p-3">
+        <h5 class="mb-3">
+          <i class="bi bi-book me-2"></i>Top 5 Libros Más Prestados
+        </h5>
+        <canvas id="librosChart" height="230"></canvas>
+      </div>
+    </div>
+    <!-- Top 10 Alumnos que más prestaron -->
+    <div class="col-lg-6">
+      <div class="card kpi-card-dark shadow-sm p-3">
+        <h5 class="mb-3">
+          <i class="bi bi-people-fill me-2"></i>Top 10 Alumnos con más préstamos
+        </h5>
+        <canvas id="alumnosChart" height="230"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Libros (títulos y cantidades)
+  var librosLabels = {{ top_libros | map(attribute='titulo') | list | tojson | safe }};
+  var librosData = {{ top_libros | map(attribute='cantidad') | list | tojson | safe }};
+
+  var ctxLibros = document.getElementById('librosChart').getContext('2d');
+  new Chart(ctxLibros, {
+      type: 'bar',
+      data: {
+          labels: librosLabels,
+          datasets: [{
+              label: 'Cantidad de Préstamos',
+              data: librosData,
+              backgroundColor: 'white',
+              borderRadius: 7,
+          }]
+      },
+      options: {
+          indexAxis: 'y',
+          responsive: true,
+          plugins: {
+              legend: { display: false }
+          },
+          scales: {
+              x: { beginAtZero: true }
+          }
+      }
+  });
+
+  // Alumnos (nombres y cantidades)
+  var alumnosLabels = {{ top_alumnos | map(attribute='nombre') | list | tojson | safe }};
+  var alumnosData = {{ top_alumnos | map(attribute='cantidad') | list | tojson | safe }};
+  var ctxAlumnos = document.getElementById('alumnosChart').getContext('2d');
+  new Chart(ctxAlumnos, {
+      type: 'bar',
+      data: {
+          labels: alumnosLabels,
+          datasets: [{
+              label: 'Cantidad de Préstamos',
+              data: alumnosData,
+              backgroundColor: 'white',
+              borderRadius: 7,
+          }]
+      },
+      options: {
+          indexAxis: 'y',
+          responsive: true,
+          plugins: {
+              legend: { display: false }
+          },
+          scales: {
+              x: { beginAtZero: true }
+          }
+      }
+  });
+</script>
+
+{% endblock %}

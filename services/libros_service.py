@@ -1,5 +1,6 @@
 from models.libro import Libro
 
+# Lista de libros de ejemplo
 _libros = [
     Libro(1, "1984", "George Orwell", "Distopía", 5),
     Libro(2, "Cien años de soledad", "Gabriel García Márquez", "Realismo mágico", 3),
@@ -13,30 +14,36 @@ _libros = [
     Libro(10, "La sombra del viento", "Carlos Ruiz Zafón", "Misterio", 4),
 ]
 
-
 def get_libros():
+    """Devuelve la lista completa de libros."""
     return _libros
 
 def add_libro(titulo, autor, genero, stock):
-    nuevo_id = max([libro.id for libro in _libros], default=0) + 1
+    """Agrega un libro nuevo con ID automático."""
+    max_id = 0
+    for libro in _libros:
+        if libro.id > max_id:
+            max_id = libro.id
+    nuevo_id = max_id + 1
+
     libro = Libro(nuevo_id, titulo, autor, genero, int(stock))
     _libros.append(libro)
     return libro
 
 def get_libro_por_id(libro_id):
-    return next((l for l in _libros if l.id == libro_id), None)
+    """Busca un libro por su ID. Devuelve el libro o None si no existe."""
+    for l in _libros:
+        if l.id == libro_id:
+            return l
+    return None
 
 def get_libros_paginados(page=1, per_page=6):
-    """
-    Devuelve una lista de libros paginados.
-    :param page: Número de página (comienza en 1)
-    :param per_page: Cantidad de libros por página
-    :return: (libros_en_pagina, total_paginas)
-    """
+    """Devuelve libros paginados. Retorna (libros_en_pagina, total_paginas)."""
     total = len(_libros)
     start = (page - 1) * per_page
     end = start + per_page
-    libros_pagina = _libros[start:end]
+    libros_pagina = []
+    for i in range(start, min(end, total)):
+        libros_pagina.append(_libros[i])
     total_pages = (total + per_page - 1) // per_page
     return libros_pagina, total_pages
-
